@@ -5,13 +5,6 @@ terraform {
       version = "=3.0.0"
     }
   }
-  backend "azurerm" {
-      resource_group_name = "First-group"
-      storage_account_name = "DataStore"
-      container_name = "Statefile_tf"
-      key = "dev.terraform.statefile"
-    
-  }
 }
 
 provider "azurerm" {
