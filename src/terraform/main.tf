@@ -16,7 +16,7 @@ provider "azurerm" {
 }
 
 # Create a resource group
-resource "azurerm_resource_group" "TF-resource" {
+resource "azurerm_resource_group" "TFresource" {
   name     = "Terraform resources"
   location = "West Europe"
 }
@@ -24,8 +24,8 @@ resource "azurerm_resource_group" "TF-resource" {
 # Create a virtual network within the resource group
 resource "azurerm_virtual_network" "VNET02" {
   name                = "VNET_02"
-  resource_group_name = azurerm_resource_group.TF-resource.name
-  location            = azurerm_resource_group.TF-resource.location
+  resource_group_name = azurerm_resource_group.TFresource.name
+  location            = azurerm_resource_group.TFresource.location
   address_space       = ["10.1.0.0/16"]
  
 }
