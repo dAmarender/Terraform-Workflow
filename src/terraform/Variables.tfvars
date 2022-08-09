@@ -1,0 +1,4 @@
+WSTN-RG-Name = "WSTNRG"
+WSTN-RG-Location= "West US 2"
+WSTYN-VNET-Name="WSTYN-VN"
+WSTYN-VNET-Address = 10.0.0.0/16

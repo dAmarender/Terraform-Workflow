@@ -1,31 +1,150 @@
 terraform {
-  required_providers {
-    azurerm = {
-      source  = "hashicorp/azurerm"
-      version = "=3.0.0"
-    }
-  }
-}
 
-provider "azurerm" {
-  features {}
-  #subscription_id  = var.subscription_id
-  #client_id        = var.client_id
-  #client_secrets   = var.client_secret
-  #tennent_id       = var.tennent_id
-}
+   required_version = ">=0.12"
 
-# Create a resource group
-resource "azurerm_resource_group" "TFresource" {
-  name     = "Tresources"
-  location = "West Europe"
-}
+   required_providers {
+     azurerm = {
+       source = "hashicorp/azurerm"
+       version = "~>2.0"
+     }
+   }
+ }
 
-# Create a virtual network within the resource group
-resource "azurerm_virtual_network" "VNET02" {
-  name                = "VNET_02"
-  resource_group_name = azurerm_resource_group.TFresource.name
-  location            = azurerm_resource_group.TFresource.location
-  address_space       = ["10.1.0.0/16"]
- 
-}
+ provider "azurerm" {
+   features {}
+ }
+
+ resource "azurerm_resource_group" "Wellstyn" {
+   name     = var.WSTN-RG-Name
+   location = var.WSTN-RG-Location
+ }
+
+ resource "azurerm_virtual_network" "WSTYN-VNET" {
+   name                = var.WSTYN-VNET-Name
+   address_space       = var.VNET-Address
+   location            = azurerm_resource_group.Wellstyn.location
+   resource_group_name = azurerm_resource_group.Wellstyn.name
+ }
+
+ resource "azurerm_subnet" "Wellstyn" {
+   name                 = "WSTYN-SUB"
+   resource_group_name  = azurerm_resource_group.Wellstyn.name
+   virtual_network_name = azurerm_virtual_network.WSTYN-VNET.name
+   address_prefixes     = ["10.0.2.0/24"]
+ }
+
+ resource "azurerm_public_ip" "Wellstyn-Pip" {
+   name                         = "publicIPForLB"
+   location                     = azurerm_resource_group.Wellstyn.location
+   resource_group_name          = azurerm_resource_group.Wellstyn.name
+   allocation_method            = "Static"
+ }
+
+ resource "azurerm_lb" "Wellstyn-lb" {
+   name                = "loadBalancer"
+   location            = azurerm_resource_group.Wellstyn.location
+   resource_group_name = azurerm_resource_group.Wellstyn.name
+
+   frontend_ip_configuration {
+     name                 = "publicIPAddress"
+     public_ip_address_id = azurerm_public_ip.Wellstyn-Pip.id
+   }
+ }
+
+ resource "azurerm_lb_backend_address_pool" "Wellstyn-Backend" {
+   loadbalancer_id     = azurerm_lb.Wellstyn-lb.id
+   name                = "BackEndAddressPool"
+ }
+
+ resource "azurerm_network_interface" "test" {
+   count               = 2
+   name                = "acctni${count.index}"
+   location            = azurerm_resource_group.Wellstyn.location
+   resource_group_name = azurerm_resource_group.Wellstyn.name
+
+   ip_configuration {
+     name                          = "testConfiguration"
+     subnet_id                     = azurerm_subnet.test.id
+     private_ip_address_allocation = "dynamic"
+   }
+ }
+
+ resource "azurerm_managed_disk" "test" {
+   count                = 2
+   name                 = "datadisk_existing_${count.index}"
+   location             = azurerm_resource_group.Wellstyn.location
+   resource_group_name  = azurerm_resource_group.Wellstyn.name
+   storage_account_type = "Standard_LRS"
+   create_option        = "Empty"
+   disk_size_gb         = "1023"
+ }
+
+ resource "azurerm_availability_set" "avset" {
+   name                         = "avset"
+   location                     = azurerm_resource_group.Wellstyn.location
+   resource_group_name          = azurerm_resource_group.Wellstyn.name
+   platform_fault_domain_count  = 2
+   platform_update_domain_count = 2
+   managed                      = true
+ }
+
+ resource "azurerm_virtual_machine" "test" {
+   count                 = 2
+   name                  = "acctvm${count.index}"
+   location              = azurerm_resource_group.Wellstyn.location
+   availability_set_id   = azurerm_availability_set.avset.id
+   resource_group_name   = azurerm_resource_group.Wellstyn.name
+   network_interface_ids = [element(azurerm_network_interface.test.*.id, count.index)]
+   vm_size               = "Standard_DS1_v2"
+
+   # Uncomment this line to delete the OS disk automatically when deleting the VM
+   # delete_os_disk_on_termination = true
+
+   # Uncomment this line to delete the data disks automatically when deleting the VM
+   # delete_data_disks_on_termination = true
+
+   storage_image_reference {
+     publisher = "Canonical"
+     offer     = "UbuntuServer"
+     sku       = "16.04-LTS"
+     version   = "latest"
+   }
+
+   storage_os_disk {
+     name              = "myosdisk${count.index}"
+     caching           = "ReadWrite"
+     create_option     = "FromImage"
+     managed_disk_type = "Standard_LRS"
+   }
+
+   # Optional data disks
+   storage_data_disk {
+     name              = "datadisk_new_${count.index}"
+     managed_disk_type = "Standard_LRS"
+     create_option     = "Empty"
+     lun               = 0
+     disk_size_gb      = "1023"
+   }
+
+   storage_data_disk {
+     name            = element(azurerm_managed_disk.test.*.name, count.index)
+     managed_disk_id = element(azurerm_managed_disk.test.*.id, count.index)
+     create_option   = "Attach"
+     lun             = 1
+     disk_size_gb    = element(azurerm_managed_disk.test.*.disk_size_gb, count.index)
+   }
+
+   os_profile {
+     computer_name  = "hostname"
+     admin_username = "testadmin"
+     admin_password = "Password1234!"
+   }
+
+   os_profile_linux_config {
+     disable_password_authentication = false
+   }
+
+   tags = {
+     environment = "staging"
+   }
+ }
