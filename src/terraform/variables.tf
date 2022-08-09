@@ -1,6 +1,6 @@
-variable "WSTNRG" {
+variable "wstnrg" {
     type = string
     }
-variable "WSTNRGLN" {
+variable "wstnrgln" {
     type = string
     }
