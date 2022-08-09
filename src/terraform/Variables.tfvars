@@ -1,4 +1,5 @@
-WSTN-RG-Name = "WSTNRG"
-WSTN-RG-Location= "West US 2"
-WSTYN-VNET-Name="WSTYN-VN"
-WSTYN-VNET-Address = 10.0.0.0/16
+WSTNRGName = "WSTNRG"
+WSTNRGLocation= "West US 2"
+WSTYNVNETName="WSTYN-VN"
+WSTYNVNETAddress = "10.0.0.0/16"
+Subnet_address_prefixes = "10.0.2.0/24"

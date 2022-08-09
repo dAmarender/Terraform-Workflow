@@ -1,12 +1,15 @@
-variable "WSTN-RG-Name" {
+variable "WSTNRGName" {
     type = string
     }
-variable "WSTN-RG-Location" {
+variable "WSTNRGLocation" {
     type = string
     }
-variable "WSTYN-VNET-Name" {
+variable "WSTYNVNETName" {
     type = string
   }
-variable "VNET-Address" {
-    type = number
+variable "VNETAddress" {
+    type = string
 } 
+variable "Subnet_address_prefixes"{
+    type = string
+}
