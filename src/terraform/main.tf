@@ -15,13 +15,13 @@ terraform {
  }
 
  resource "azurerm_resource_group" "Wellstyn" {
-   name     = var.WSTN-RG-Name
-   location = var.WSTN-RG-Location
+   name     = "${var.WSTN-RG-Name}"
+   location = "${var.WSTN-RG-Location}"
  }
 
  resource "azurerm_virtual_network" "WSTYN-VNET" {
-   name                = var.WSTYN-VNET-Name
-   address_space       = var.VNET-Address
+   name                = "${var.WSTYN-VNET-Name}"
+   address_space       = "${var.VNET-Address}"
    location            = azurerm_resource_group.Wellstyn.location
    resource_group_name = azurerm_resource_group.Wellstyn.name
  }
