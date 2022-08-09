@@ -13,7 +13,3 @@ variable "wsvnets" {
     type = string
     description = "Wellstyn Virtual networks"
 }
-variable "vnetaddress" {
-    type = "[10.0.0.0/16]"
-    description = "Vent address"
-}
