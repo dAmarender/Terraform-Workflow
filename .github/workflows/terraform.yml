@@ -12,6 +12,7 @@ env:
       ARM_SUBSCRIPTION_ID: ${{secrets.AZURE_SUBSCRIPTION_ID}}
       ARM_TENANT_ID: ${{secrets.AZURE_TENANT_ID}}
       ROOT_PATH: ${{ GitHub.workspace}}/src/terraform
+      PATH: ${{ GitHub.workspace}}/src/variables
   
 jobs:
   terraform_Plan:
@@ -46,7 +47,7 @@ jobs:
 
     # Generates an execution plan for Terraform
     - name: Terraform Plan
-      run: terraform plan -var-file= variables/terraform.tfvars
+      run: terraform plan -var-file= ${{env.PATH}}/terraform.tfvars
       working-directory: ${{env.ROOT_PATH}}
     
   terraform_Apply:
