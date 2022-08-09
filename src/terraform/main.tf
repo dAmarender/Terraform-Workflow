@@ -17,7 +17,9 @@ terraform {
  resource "azurerm_resource_group" "Wellstyn" {
    name     = "${var.rgname}"
    location = "${var.rglocation}"
-   tags = "not rquired"
+   tags = {
+    Name = "not required"
+  }
  }
 
  
