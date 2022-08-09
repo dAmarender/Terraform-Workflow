@@ -1,5 +1,2 @@
-WSTNRGName = "WSTNRG"
-WSTNRGLocation= "West US 2"
-WSTYNVNETName="WSTYN-VN"
-WSTYNVNETAddress = "10.0.0.0/16"
-Subnet_address_prefixes = "10.0.2.0/24"
+WSTNRG = "WSTYN-RESOURCES"
+WSTNRGLN ="ESAT US 2"
