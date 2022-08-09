@@ -10,11 +10,7 @@ terraform {
    }
  }
 
- provider "azurerm" {
-   features {}
- }
-
- resource "azurerm_resource_group" "Wellstyn" {
-   name     = "${var.wstnrg}"
-   location = "${var.wstnrgln}"
+ resource "azurerm_resource_group" "rg" {
+   name     = "${var.rgname}"
+   location = "${var.rglocation}"
  }

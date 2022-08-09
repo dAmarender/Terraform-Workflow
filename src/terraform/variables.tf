@@ -1,6 +1,6 @@
-variable "wstnrg" {
+variable "rgname" {
   type = string
 }
-variable "wstnrgln" {
+variable "rglocation" {
   type = string
 }

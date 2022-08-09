@@ -1,2 +1,2 @@
-wstnrg = "WSTYN-RESOURCES"
-wstnrgln = "ESAT US 2"
+rgrgname = "WSTYN-RESOURCES"
+rgrglocation = "ESAT US 2"
