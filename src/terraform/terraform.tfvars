@@ -1,2 +1,2 @@
-rggname = "WSTYN-RESOURCES"
-rgglocation = "East US"
+rggname = WSTYN-RESOURCES
+rgglocation = East US
