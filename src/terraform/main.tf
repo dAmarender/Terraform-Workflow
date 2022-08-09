@@ -21,5 +21,9 @@ terraform {
     Name = "not required"
   }
  }
-
- 
+ resource "azurerm_virtual_network" "ws-vnets" {
+   name                = "${var.wsvnets}"
+   address_space       = ["${var.vnetaddress}"]
+   location            = azurerm_resource_group.Wellstyn.location
+   resource_group_name = azurerm_resource_group.Wellstyn.name
+ }

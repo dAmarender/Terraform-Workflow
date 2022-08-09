@@ -9,3 +9,11 @@ variable "rglocation" {
   #default = "East US"
   description = "Resource group location"
   }
+variable "wsvnets" {
+    type = string
+    description = "Wellstyn Virtual networks"
+}
+variable "vnetaddress" {
+    type = string
+    description = "Vent address"
+}
