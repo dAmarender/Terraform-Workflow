@@ -15,6 +15,6 @@ terraform {
  }
 
  resource "azurerm_resource_group" "Wellstyn" {
-   name     = "${var.WSTNRG}"
-   location = "${var.WSTNRGLN}"
+   name     = "${var.wstnrg}"
+   location = "${var.wstnrgln}"
  }
