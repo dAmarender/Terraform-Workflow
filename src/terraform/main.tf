@@ -15,13 +15,13 @@ terraform {
  }
 
  resource "azurerm_resource_group" "Wellstyn" {
-   name     = "${var.WSTN-RG-Name}"
-   location = "${var.WSTN-RG-Location}"
+   name     = "${var.WSTNRGName}"
+   location = "${var.WSTNRGLocation}"
  }
 
  resource "azurerm_virtual_network" "WSTYN-VNET" {
-   name                = "${var.WSTYN-VNET-Name}"
-   address_space       = "${var.VNET-Address}"
+   name                = "${var.WSTYNVNETName}"
+   address_space       = ["${var.VNETAddress}"]
    location            = azurerm_resource_group.Wellstyn.location
    resource_group_name = azurerm_resource_group.Wellstyn.name
  }
@@ -30,7 +30,7 @@ terraform {
    name                 = "WSTYN-SUB"
    resource_group_name  = azurerm_resource_group.Wellstyn.name
    virtual_network_name = azurerm_virtual_network.WSTYN-VNET.name
-   address_prefixes     = ["10.0.2.0/24"]
+   address_prefixes     = ["${var.Subnet_address_prefixes}"]
  }
 
  resource "azurerm_public_ip" "Wellstyn-Pip" {
