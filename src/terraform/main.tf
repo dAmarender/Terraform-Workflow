@@ -14,7 +14,7 @@ terraform {
    features {}
  }
 
- resource "azurerm_resource_group" "Wellstyn" {
+ resource "azurerm_resource_group" "Wellstyn01" {
    name     = "${var.rgname}"
    location = "${var.rglocation}"
    tags = {
@@ -24,6 +24,6 @@ terraform {
  resource "azurerm_virtual_network" "ws-vnets" {
    name                = "${var.wsvnets}"
    address_space       = ["${var.vnetaddress}"]
-   location            = azurerm_resource_group.Wellstyn.location
-   resource_group_name = azurerm_resource_group.Wellstyn.name
+   location            = azurerm_resource_group.Wellstyn01.location
+   resource_group_name = azurerm_resource_group.Wellstyn01.name
  }
